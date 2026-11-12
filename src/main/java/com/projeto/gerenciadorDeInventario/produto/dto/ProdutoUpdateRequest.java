@@ -1,8 +1,10 @@
 package com.projeto.gerenciadorDeInventario.produto.dto;
 
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 
 public record ProdutoUpdateRequest(
         String nome,
-        BigDecimal preco
+        @PositiveOrZero BigDecimal preco
 ) {}

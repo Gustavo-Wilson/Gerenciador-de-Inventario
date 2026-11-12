@@ -7,6 +7,7 @@ import com.projeto.gerenciadorDeInventario.produto.entidade.Produto;
 import com.projeto.gerenciadorDeInventario.produto.repositorio.ProdutoRepository;
 import com.projeto.gerenciadorDeInventario.produto.service.ProdutoService;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +42,16 @@ public class ProdutoController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, ProdutoUpdateRequest request){
-        return ResponseEntity.ok().build();
+    @PatchMapping("/{id}")
+    public ResponseEntity update(@PathVariable Integer id, @Valid ProdutoUpdateRequest request){
+        try {
+            ProdutoResponse response = produtoService.update(id, request);
+            return ResponseEntity.ok().body(response);
+        } catch(EntityNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        }
     }
 
     @DeleteMapping
