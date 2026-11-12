@@ -43,12 +43,14 @@ public class ProdutoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, @Valid ProdutoUpdateRequest request){
+    public ResponseEntity update(@PathVariable Integer id, @RequestBody @Valid ProdutoUpdateRequest request){
         try {
             ProdutoResponse response = produtoService.update(id, request);
             return ResponseEntity.ok().body(response);
+
         } catch(EntityNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+
         } catch (IllegalArgumentException exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }

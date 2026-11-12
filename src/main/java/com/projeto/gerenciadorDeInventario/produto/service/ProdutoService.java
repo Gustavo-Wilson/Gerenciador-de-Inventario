@@ -61,21 +61,23 @@ public class ProdutoService {
                 );
 
         if (request.nome() != null){
-            if (request.nome().isEmpty()){
+            if (request.nome().isBlank()){
                 throw new IllegalArgumentException("The name of the product cannot be empty");
             }
-            produto.setNome(request.nome());
+            produto.setNome(request.nome().trim());
         }
 
         if (request.preco() != null){
             produto.setPreco(request.preco());
         }
 
+        Produto saved = produtoRepository.save(produto);
+
         ProdutoResponse response = new ProdutoResponse(
-                produto.getId(),
-                produto.getNome(),
-                produto.getPreco(),
-                produto.getQuantidade());
+                saved.getId(),
+                saved.getNome(),
+                saved.getPreco(),
+                saved.getQuantidade());
 
         return response;
 
